@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export type SearchBarProps = {
-  onSearch: (term: string, location: string, sortBy: string) => void;
+  onSearch: (term: string, location: string, sortBy: string) => Promise<any>;
 };
 
 export const SearchBar = ({ onSearch }: SearchBarProps) => {
@@ -10,6 +10,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [sortBy, setSortBy] = useState("best_match");
 
   const handleTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     setTerm(event.target.value);
   };
 
@@ -25,6 +26,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const handleSortChange = (sortOption: string) => {
     setSortBy(sortOption);
   };
+  
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-light-gray shadow">
