@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 export type BusinessComponentProps = {
+  key:string
   image: string;
   name: string;
   address: string;
@@ -10,9 +11,11 @@ export type BusinessComponentProps = {
   category: string;
   rating: number;
   reviewCount: number;
+  handleClick: () => void;
 };
 
-export const Business = ({
+export const BusinessCard = ({
+  key,
   image,
   name,
   address,
@@ -22,9 +25,10 @@ export const Business = ({
   category,
   rating,
   reviewCount,
+  handleClick,
 }: BusinessComponentProps) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-light-gray m-4 transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl cursor-pointer">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-light-gray m-4 transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl cursor-pointer" onClick={handleClick}>
       <div className="w-full h-48 relative">
         <Image
           src={image}

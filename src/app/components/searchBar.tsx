@@ -2,15 +2,17 @@ import React, { useState } from "react";
 
 export type SearchBarProps = {
   onSearch: (term: string, location: string, sortBy: string) => Promise<any>;
+  initialTerm?: string;
+  initialLocation?: string;
+  initialSortBy?: string;
 };
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const [term, setTerm] = useState("");
-  const [location, setLocation] = useState("");
-  const [sortBy, setSortBy] = useState("best_match");
+export const SearchBar = ({ onSearch, initialTerm = "", initialLocation = "", initialSortBy = "best_match" }: SearchBarProps) => {
+  const [term, setTerm] = useState(initialTerm);
+  const [location, setLocation] = useState(initialLocation);
+  const [sortBy, setSortBy] = useState(initialSortBy);
 
   const handleTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setTerm(event.target.value);
   };
 
@@ -25,8 +27,10 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
 
   const handleSortChange = (sortOption: string) => {
     setSortBy(sortOption);
+    if (term !== "" && location !== "") {
+      onSearch(term, location, sortOption);
+    }
   };
-  
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-light-gray shadow">
@@ -45,10 +49,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
           value={location}
           onChange={handleLocationChange}
         />
-        <button
-          className="px-4 py-2 bg-deep-blue text-white rounded hover:bg-sky-blue"
-          type="submit"
-        >
+        <button className="px-4 py-2 bg-deep-blue text-white rounded hover:bg-sky-blue" type="submit">
           Search
         </button>
       </form>

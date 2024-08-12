@@ -1,12 +1,8 @@
-import { useState, useCallback } from 'react';
-import fetchBusinesses from '../utils/yelpApi';
+import { useState, useCallback, useEffect } from 'react';
+import FetchBusinesses, { FetchBusinessesProps } from '../utils/yelpApi';
 import { BusinessComponentProps } from '../components/business';
 
-type FetchBusinessesProps = {
-  term: string;
-  location: string;
-  sortBy: string;
-};
+
 
 const useYelpSearch = () => {
   const [businesses, setBusinesses] = useState<BusinessComponentProps[]>([]);
@@ -16,10 +12,13 @@ const useYelpSearch = () => {
   const searchYelp = useCallback(async ({ term, location, sortBy }: FetchBusinessesProps) => {
     setLoading(true);
     setError(null);
+   
+    
     try {
-      const data = await fetchBusinesses({ term, location, sortBy });
+      const data = await FetchBusinesses({ term, location, sortBy });
       if (data && data.businesses) {
         const newBusinesses = data.businesses.map((business: any) => ({
+          key: business.id,
           image: business.image_url,
           name: business.name,
           address: `${business.location.address1 || ''} ${business.location.address2 || ''} ${business.location.address3 || ''}`.trim(),
@@ -29,7 +28,9 @@ const useYelpSearch = () => {
           category: business.categories[0].title,
           rating: business.rating,
           reviewCount: business.review_count,
+          
         }));
+          console.log("business", newBusinesses)
 
         if (sortBy === 'rating') {
           newBusinesses.sort((a: BusinessComponentProps, b: BusinessComponentProps) => b.rating - a.rating);
