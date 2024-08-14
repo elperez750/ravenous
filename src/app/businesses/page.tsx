@@ -1,13 +1,14 @@
 "use client";
 
+import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import LoadingSpinner from "../components/loadingSpinner";
 import BusinessList from "../components/businessList";
 import useYelpSearch from "../hooks/useYelpSearch";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import fetchBusinessDetails from "../utils/fetchBusinessDetails";
-import LoadingSpinner from "../components/loadingSpinner";
-import { useEffect, Suspense } from "react";
 
-export default function BusinessListPage() {
+function BusinessListContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { searchYelp, businesses, loading } = useYelpSearch();
@@ -20,23 +21,34 @@ export default function BusinessListPage() {
     if (term && location) {
       searchYelp({ term, location, sortBy });
     }
-  }, [searchParams]);
+  }, [searchParams, searchYelp]);
 
   const showBusinessDetails = async (id: string) => {
     const details = await fetchBusinessDetails(id);
     const query = new URLSearchParams(details).toString();
-    console.log("query", query);
     router.push(`/business/${id}?${query}`);
   };
 
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (businesses.length === 0) {
+    return <p>No businesses found.</p>;
+  }
+
   return (
-    <>
-      {loading && <LoadingSpinner />}
-      {!loading && businesses.length === 0 && <p>No businesses found.</p>}
-      <BusinessList
-        businesses={businesses}
-        onBusinessClick={showBusinessDetails}
-      />
-    </>
+    <BusinessList
+      businesses={businesses}
+      onBusinessClick={showBusinessDetails}
+    />
+  );
+}
+
+export default function BusinessListPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <BusinessListContent />
+    </Suspense>
   );
 }
