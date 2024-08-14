@@ -30,13 +30,13 @@ export default function BusinessListPage() {
   };
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <>
       {loading && <LoadingSpinner />}
       {!loading && businesses.length === 0 && <p>No businesses found.</p>}
       <BusinessList
         businesses={businesses}
         onBusinessClick={showBusinessDetails}
       />
-    </Suspense>
+    </>
   );
 }
