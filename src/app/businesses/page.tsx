@@ -1,11 +1,11 @@
 "use client";
-import { Suspense } from "react";
+
 import BusinessList from "../components/businessList";
 import useYelpSearch from "../hooks/useYelpSearch";
 import { useRouter, useSearchParams } from "next/navigation";
 import fetchBusinessDetails from "../utils/fetchBusinessDetails";
 import LoadingSpinner from "../components/loadingSpinner";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
 export default function BusinessListPage() {
   const router = useRouter();
