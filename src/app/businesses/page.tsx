@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import BusinessList from "../components/businessList";
 import useYelpSearch from "../hooks/useYelpSearch";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -29,13 +30,13 @@ export default function BusinessListPage() {
   };
 
   return (
-    <>
+    <Suspense fallback={<LoadingSpinner />}>
       {loading && <LoadingSpinner />}
       {!loading && businesses.length === 0 && <p>No businesses found.</p>}
       <BusinessList
         businesses={businesses}
         onBusinessClick={showBusinessDetails}
       />
-    </>
+    </Suspense>
   );
 }
