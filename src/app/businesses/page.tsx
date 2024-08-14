@@ -1,12 +1,12 @@
 "use client";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BusinessList from "../components/businessList";
 import useYelpSearch from "../hooks/useYelpSearch";
 import LoadingSpinner from "../components/loadingSpinner";
 import fetchBusinessDetails from "../utils/fetchBusinessDetails";
 
-export default function BusinessListPage() {
+function BusinessListContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { searchYelp, businesses, loading } = useYelpSearch();
@@ -40,5 +40,13 @@ export default function BusinessListPage() {
       businesses={businesses}
       onBusinessClick={showBusinessDetails}
     />
+  );
+}
+
+export default function BusinessListPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <BusinessListContent />
+    </Suspense>
   );
 }
