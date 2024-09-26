@@ -1,6 +1,5 @@
 "use client";
-import DefaultView from './components/defaultView';
-
+import DefaultView from "./DefaultView/page"
 
 
 
